@@ -1,18 +1,14 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable, from, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { ExamDatabaseRecord } from '../models/types';
-
-// TODO: When integrating actual Firebase Firestore:
-// import { Firestore, collection, writeBatch, doc } from '@angular/fire/firestore';
+import { Firestore, collection, writeBatch, doc } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ExamDataService {
-  constructor(
-    // private firestore: Firestore // Inject Firestore when ready
-  ) {}
+  private firestore: Firestore = inject(Firestore);
 
   /**
    * 대학교 CSV 데이터(가천대 샘플 형식)를 파싱하여 데이터베이스에 업로드합니다.
@@ -76,34 +72,23 @@ export class ExamDataService {
     }
 
     // 4. Firestore에 일괄 업로드 (Batch Write)
-    // ===========================================================================
-    // TODO: Production Code for Firebase Firestore
-    // ===========================================================================
-    /*
     const batch = writeBatch(this.firestore);
-    const examCollectionRef = collection(this.firestore, 'exam_materials');
+    const examCollectionRef = collection(this.firestore, 'logic_exams');
 
     records.forEach(record => {
-      // 자동 생성되는 ID로 문서 생성
+      // 사용자가 요청한 컬렉션에 저장합니다.
       const newDocRef = doc(examCollectionRef);
-      // 고유 ID를 지정하고 싶다면: doc(examCollectionRef, `${record.university}_${record.year}_${record.problemType}`)
       batch.set(newDocRef, record);
     });
 
+    // 500개 제한이 있으므로, 매우 큰 CSV의 경우 청크 처리가 필요할 수 있습니다.
+    // 현재는 일반적인 크기를 가정하고 한번에 커밋합니다.
     await batch.commit();
-    */
-    // ===========================================================================
-
-    // 모의 응답
-    console.log('[Mock] Firestore Batch Commit Simulated with records:', records);
-
-    // 강제 지연 시뮬레이션
-    await new Promise(resolve => setTimeout(resolve, 1500));
 
     return {
       success: true,
       count: records.length,
-      message: `${records.length}개의 마스터 데이터가 클라우드에 성공적으로 동기화되었습니다.`
+      message: `${records.length}개의 데이터가 Firestore(logic_exams)에 성공적으로 업로드되었습니다.`
     };
   }
 }
