@@ -2,8 +2,8 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Matches any document in the 'exams' collection
-    match /exams/{examId} {
+    // Matches any document in the 'logic_exams' collection
+    match /logic_exams/{examId} {
       // For now, allow anyone to read/write for testing.
       // Replace with strict rules for production later (e.g. `allow read, write: if request.auth != null;`)
       allow read, write: if true;

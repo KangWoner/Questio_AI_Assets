@@ -50,19 +50,22 @@ export class ExamDataService {
 
       // 최소 필수 열 확인 (대학교, 연도, 유형)
       if (columns.length >= 3) {
-        const record: ExamDatabaseRecord = {
+        const record: Partial<ExamDatabaseRecord> = {
           university: columns[0],
           year: columns[1],
           problemType: columns[2],
-          problemUrl: columns[3] || undefined, // 비어있을 수 있음
-          solutionUrl: columns[4] || undefined, // 비어있을 수 있음
         };
+
+        // Firebase Firestore does not support 'undefined' values.
+        // Omit the property entirely if it's empty to prevent SDK crashes.
+        if (columns[3]) record.problemUrl = columns[3];
+        if (columns[4]) record.solutionUrl = columns[4];
 
         // 데이터가 유효한지 간단히 체크
         if (record.university && record.year && record.problemType) {
-            records.push(record);
+          records.push(record as ExamDatabaseRecord);
         } else {
-            console.warn(`[Warning] ${i + 1}번째 행 데이터가 불완전하여 무시되었습니다:`, dataRows[i]);
+          console.warn(`[Warning] ${i + 1}번째 행 데이터가 불완전하여 무시되었습니다:`, dataRows[i]);
         }
       }
     }

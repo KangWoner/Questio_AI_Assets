@@ -1,9 +1,11 @@
 import * as functions from "firebase-functions";
 import { GoogleGenAI } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY }); // Uses environment variable
-
-export const evaluateStudentSolution = functions.https.onCall(async (data, context) => {
+export const evaluateStudentSolution = functions
+  .runWith({ secrets: ["GEMINI_API_KEY"] })
+  .https.onCall(async (data, context) => {
+  // Initialize AI client inside the function to ensure process.env is populated by Secret Manager
+  const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
   // Authentication check: Ensure the user is logged in
   // if (!context.auth) {
   //   throw new functions.https.HttpsError("unauthenticated", "User must be logged in.");
