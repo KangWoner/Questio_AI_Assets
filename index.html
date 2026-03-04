@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>수리논술 조교</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        },
+        svg: {
+          fontCache: 'global'
+        }
+      };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://aistudiocdn.com/react@^19.1.1",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.1.1/",
+    "react/": "https://aistudiocdn.com/react@^19.1.1/",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.16.0"
+  }
+}
+</script>
+  <style>
+    body {
+      background-color: #0c0a09; /* stone-950 */
+    }
+    .aurora-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      opacity: 0.2;
+      background-image: radial-gradient(ellipse at 75% 25%, #0ea5e9 0%, #4f46e5 40%, #d946ef 80%, #ec4899 100%);
+      filter: blur(80px);
+    }
+    /* Custom Scrollbar for a modern look */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #1c1917; /* stone-900 */
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #44403c; /* stone-700 */
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #57534e; /* stone-600 */
+    }
+  </style>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body class="text-stone-300">
+    <div class="aurora-background"></div>
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>

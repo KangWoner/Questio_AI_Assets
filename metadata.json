@@ -1,0 +1,5 @@
+{
+  "name": "Remix: Questio AI 채점 조교",
+  "description": "대학별 수학 논술 시험 채점을 돕는 AI 조교 애플리케이션입니다. 사용자가 시험 자료와 학생의 풀이를 업로드하면, 상세한 평가 보고서를 깔끔한 HTML 형식으로 생성해줍니다.",
+  "requestFramePermissions": []
+}
