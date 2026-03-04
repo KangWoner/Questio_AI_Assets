@@ -1,7 +1,8 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { EvaluationStateService } from '../../services/evaluation-state.service';
 import { AiEvaluationService } from '../../services/ai-evaluation.service';
+import { ExamDataService } from '../../services/exam-data.service';
 import { FormData } from '../../models/types';
 import { Observable } from 'rxjs';
 import { EvaluationState } from '../../services/evaluation-state.service';
@@ -22,13 +23,22 @@ import { EvaluationState } from '../../services/evaluation-state.service';
         <!-- 폼 영역 (간소화 모형) -->
         <div class="xl:col-span-5 lg:sticky top-36 bg-stone-900/60 p-8 rounded-[3rem] border border-stone-800/50">
           <h2 class="text-xl font-black text-stone-100 uppercase mb-6">Exam Configuration</h2>
-          <button
-             (click)="startBatchEvaluation()"
-             [disabled]="(evalState$ | async)?.status === 'processing'"
-             class="w-full py-4 bg-sky-600 hover:bg-sky-500 text-white font-black rounded-2xl shadow-xl shadow-sky-900/30 uppercase tracking-widest disabled:opacity-50 disabled:cursor-not-allowed">
-             {{ (evalState$ | async)?.status === 'processing' ? 'Processing...' : 'Execute Questio-Engine' }}
-          </button>
-          <p class="text-xs text-stone-500 mt-4">* 이 버튼은 현재 Angular의 RxJS 기반 큐 시스템을 테스트합니다 (브라우저 프리징 없음).</p>
+          <div class="space-y-4">
+            <h3 class="text-sm font-black text-stone-400 uppercase">1. Upload Database (CSV)</h3>
+            <input type="file" #csvFileInput accept=".csv" (change)="onCsvUpload($event)" class="block w-full text-sm text-stone-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-sky-600/20 file:text-sky-400 hover:file:bg-sky-600/30 transition-all cursor-pointer">
+            <p *ngIf="uploadStatus" class="text-xs font-bold" [ngClass]="{'text-green-400': uploadStatus.includes('성공'), 'text-red-400': uploadStatus.includes('오류')}">{{ uploadStatus }}</p>
+          </div>
+
+          <div class="mt-12 space-y-4">
+            <h3 class="text-sm font-black text-stone-400 uppercase">2. AI Evaluation Queue</h3>
+            <button
+               (click)="startBatchEvaluation()"
+               [disabled]="(evalState$ | async)?.status === 'processing'"
+               class="w-full py-4 bg-sky-600 hover:bg-sky-500 text-white font-black rounded-2xl shadow-xl shadow-sky-900/30 uppercase tracking-widest disabled:opacity-50 disabled:cursor-not-allowed transition-all">
+               {{ (evalState$ | async)?.status === 'processing' ? 'Processing...' : 'Execute Questio-Engine' }}
+            </button>
+            <p class="text-xs text-stone-500 mt-2">* 이 버튼은 현재 Angular의 RxJS 기반 큐 시스템을 테스트합니다 (브라우저 프리징 없음).</p>
+          </div>
         </div>
 
         <!-- 결과 프로그레스 영역 (핵심 - RxJS 구독) -->
@@ -91,12 +101,34 @@ export class DashboardComponent {
   @Output() logout = new EventEmitter<void>();
 
   evalState$: Observable<EvaluationState>;
+  uploadStatus: string = '';
+
+  private examDataService = inject(ExamDataService);
 
   constructor(
     private stateService: EvaluationStateService,
     private aiEvalService: AiEvaluationService
   ) {
     this.evalState$ = this.stateService.state$;
+  }
+
+  onCsvUpload(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+      this.uploadStatus = '업로드 중... (Firestore 기록 중)';
+
+      this.examDataService.uploadCsvData(file).subscribe({
+        next: (result) => {
+          this.uploadStatus = result.message;
+          input.value = ''; // Reset file input
+        },
+        error: (err) => {
+          this.uploadStatus = `업로드 오류: ${err.message}`;
+          input.value = ''; // Reset file input
+        }
+      });
+    }
   }
 
   // 모의 폼 데이터와 5명의 가상 학생 리스트

@@ -15,20 +15,21 @@ export const evaluateStudentSolution = functions.https.onCall(async (data, conte
     // 1. Construct the prompt with context from GCS materials (URLs or text)
     // 2. Instruct the model strictly on how to grade
 
+    // Combine the user's specific context with the operational JSON instructions
     const prompt = `
-      You are an expert Math logic evaluator.
-      Grade the following student solution based on the provided criteria.
+      You are an expert AI assistant specializing in South Korean university entrance exams (수리논술/약술형 고사).
+      Find the official scoring criteria, model answers, or detailed solution steps for the following exam: "[${examInfo}]".
+      Evaluate the student's solution based on these criteria and key solution points in Korean. Be as specific as possible.
 
-      Exam Context: ${examInfo}
-      Criteria: ${formData.scoringCriteria}
+      Additional Criteria Provided: ${formData.scoringCriteria}
       Student Solution Links (Process these): ${studentData.solutionFiles.map((f: any) => f.url).join(', ')}
 
-      Output ONLY a valid JSON object matching this schema:
+      Output ONLY a valid JSON object matching this schema. All text MUST be in Korean markdown format.
       {
-        "totalScore": number,
-        "strengths": string,
-        "weaknesses": string,
-        "htmlReportSnippet": string (A styled HTML div summarizing the result)
+        "totalScore": number (총점),
+        "strengths": string (강점 분석 요약),
+        "weaknesses": string (약점 및 개선점 요약),
+        "htmlReportSnippet": string (A styled HTML div summarizing the detailed result and scoring criteria in Korean)
       }
     `;
 
@@ -42,7 +43,7 @@ export const evaluateStudentSolution = functions.https.onCall(async (data, conte
       }
     });
 
-    const resultText = response.text();
+    const resultText = response.text; // The new @google/genai SDK uses a property, not a method.
     if (!resultText) {
         throw new Error("No text returned from Gemini.");
     }
