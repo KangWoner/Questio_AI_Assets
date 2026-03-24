@@ -20,8 +20,24 @@ export const ReportPlaceholder: React.FC = () => {
             </div>
         </div>
       </div>
-      <h3 className="mt-8 text-xl font-bold text-stone-200">AI 평가 보고서</h3>
-      <p className="mt-2 text-stone-400 max-w-sm">좌측에 공통 정보와 학생 목록을 추가하고 '일괄 생성 시작' 버튼을 클릭하면, 처리 결과가 여기에 표시됩니다.</p>
+      <h3 className="mt-8 text-2xl font-black text-white tracking-tight">AI 평가 보고서</h3>
+      <p className="mt-2 text-stone-400 max-w-md text-sm">좌측에 공통 정보와 학생 목록을 추가하고 '일괄 생성 시작' 버튼을 클릭하면, 처리 결과가 여기에 표시됩니다.</p>
+      
+      <div className="mt-10 w-full max-w-2xl bg-stone-900/80 border border-stone-700/50 rounded-2xl p-6 text-left shadow-lg backdrop-blur-md">
+        <h4 className="text-cyan-400 font-bold mb-4 flex items-center">
+          <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+          상단 메뉴 가이드
+        </h4>
+        <ul className="space-y-3 text-sm text-stone-300">
+          <li className="flex items-start"><span className="w-28 shrink-0 font-black text-sky-400">ENGINE (엔진)</span> <span>논술 답안을 분석하고 평가하는 'AI 채점 조교' 메인 화면입니다.</span></li>
+          <li className="flex items-start"><span className="w-28 shrink-0 font-black text-fuchsia-400">STORE</span> <span>대학별 기출문제집, 평가 기준(Scoring Criteria)을 판매하는 상점입니다.</span></li>
+          <li className="flex items-start"><span className="w-28 shrink-0 font-black text-emerald-400">내 보관함</span> <span>내가 구매하여 앱 내에서 즉시 사용 가능한 대학교 기출문제(에셋) 목록입니다.</span></li>
+          <li className="flex items-start"><span className="w-28 shrink-0 font-black text-red-500">SUPER ADMIN</span> <span>개발자 및 권한이 부여된 대표 강사 전용 시스템 관리자 패널입니다.</span></li>
+          <li className="flex items-start"><span className="w-28 shrink-0 font-black text-purple-400">TOKENS</span> <span>현재 [사용 가능한 토큰 수 / 누적 지급(구매)된 총 토큰 수]를 의미합니다.</span></li>
+          <li className="flex items-start"><span className="w-28 shrink-0 font-black text-slate-300">GCS-SYNC</span> <span>구글 클라우드 스토리지(GCS)와 안정적으로 연동되어 있는 활성 상태 표시입니다.</span></li>
+          <li className="flex items-start"><span className="w-28 shrink-0 font-black text-stone-400">로그아웃 (OUT)</span> <span>구글 계정 로그인 상태를 표시하며 언제든 'OUT' 버튼을 눌러 로그아웃할 수 있습니다.</span></li>
+        </ul>
+      </div>
     </div>
   );
 };

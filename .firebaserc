@@ -1,0 +1,19 @@
+{
+  "projects": {},
+  "targets": {
+    "questio-ai-b2b": {
+      "hosting": {
+        "admin": [
+          "questio-ai-b2b"
+        ],
+        "student": [
+          "questio-tutor"
+        ],
+        "essay": [
+          "questio-essay-tutor"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}

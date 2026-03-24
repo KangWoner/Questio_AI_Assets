@@ -1,0 +1,118 @@
+{
+    "firestore": {
+        "rules": "firestore.rules",
+        "indexes": "firestore.indexes.json"
+    },
+    "storage": {
+        "rules": "storage.rules"
+    },
+    "hosting": [
+        {
+            "target": "admin",
+            "public": "dist",
+            "ignore": [
+                "firebase.json",
+                "**/.*",
+                "**/node_modules/**"
+            ],
+            "headers": [
+                {
+                    "source": "**",
+                    "headers": [
+                        {
+                            "key": "Cross-Origin-Opener-Policy",
+                            "value": "unsafe-none"
+                        },
+                        {
+                            "key": "Cross-Origin-Embedder-Policy",
+                            "value": "unsafe-none"
+                        }
+                    ]
+                }
+            ],
+            "rewrites": [
+                {
+                    "source": "/api/generateContent",
+                    "function": "geminiProxy"
+                },
+                {
+                    "source": "/api/generateEvaluationReport",
+                    "function": "generateEvaluationReport"
+                },
+                {
+                    "source": "/api/confirmPayment",
+                    "function": "confirmPayment"
+                },
+                {
+                    "source": "**",
+                    "destination": "/index.html"
+                }
+            ]
+        },
+        {
+            "target": "student",
+            "public": "questio-student-app/dist",
+            "ignore": [
+                "firebase.json",
+                "**/.*",
+                "**/node_modules/**"
+            ],
+            "headers": [
+                {
+                    "source": "**",
+                    "headers": [
+                        {
+                            "key": "Cross-Origin-Opener-Policy",
+                            "value": "same-origin-allow-popups"
+                        }
+                    ]
+                }
+            ],
+            "rewrites": [
+                {
+                    "source": "**",
+                    "destination": "/index.html"
+                }
+            ]
+        },
+        {
+            "target": "essay",
+            "public": "questio-essay-app/dist",
+            "ignore": [
+                "firebase.json",
+                "**/.*",
+                "**/node_modules/**"
+            ],
+            "headers": [
+                {
+                    "source": "**",
+                    "headers": [
+                        {
+                            "key": "Cross-Origin-Opener-Policy",
+                            "value": "same-origin-allow-popups"
+                        }
+                    ]
+                }
+            ],
+            "rewrites": [
+                {
+                    "source": "**",
+                    "destination": "/index.html"
+                }
+            ]
+        }
+    ],
+    "functions": {
+        "source": "functions",
+        "codebase": "default",
+        "ignore": [
+            "node_modules",
+            ".git",
+            "firebase-debug.log",
+            "firebase-debug.*.log"
+        ],
+        "predeploy": [
+            "npm --prefix \"$RESOURCE_DIR\" run build"
+        ]
+    }
+}

@@ -1,0 +1,17 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // 에셋 파일 업로드 경로
+    match /assets/{allPaths=**} {
+      // 읽기는 누구나(상점 방문객) 가능
+      allow read: if true; 
+      // 임시로 관리자 외 로그인 유저도 등록 가능하게 하여 권한 에러 회피
+      allow write: if request.auth != null;
+    }
+    
+    // 그 외 경로는 기본적으로 쓰기 금지
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

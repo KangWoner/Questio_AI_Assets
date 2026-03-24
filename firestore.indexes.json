@@ -1,0 +1,19 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "questions",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "university",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "createdAt",
+          "order": "DESCENDING"
+        }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}
